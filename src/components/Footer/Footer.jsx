@@ -2,6 +2,7 @@ import './footer.css'
 
 import { Container, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
 import { Link } from 'react-router-dom';
+import { scrollToTop } from '../Scroll-Link/ScrollToTop';
 
 const Footer = () => {
 
@@ -56,19 +57,19 @@ const Footer = () => {
                             <h4 className="quick__links-title">Useful Links</h4>
                             <ListGroup>
                                 <ListGroupItem className='ps-0 border-0'>
-                                    <Link to='/shop'>Shop</Link>
+                                    <Link onClick={scrollToTop} to='/shop'>Shop</Link>
                                 </ListGroupItem>
 
                                 <ListGroupItem className='ps-0 border-0'>
-                                    <Link to='/cart'>Cart</Link>
+                                    <Link onClick={scrollToTop} to='/cart'>Cart</Link>
                                 </ListGroupItem>
 
                                 <ListGroupItem className='ps-0 border-0'>
-                                    <Link to='/login'>Login</Link>
+                                    <Link onClick={scrollToTop} to='/login'>Login</Link>
                                 </ListGroupItem>
 
                                 <ListGroupItem className='ps-0 border-0'>
-                                    <Link to='#'>Privacy Policy</Link>
+                                    <Link onClick={scrollToTop} to='#'>Privacy Policy</Link>
                                 </ListGroupItem>
                             </ListGroup>
                         </div>

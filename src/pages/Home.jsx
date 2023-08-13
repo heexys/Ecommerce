@@ -14,6 +14,7 @@ import counterImg from '../assets/images/counter-timer-img.png'
 
 import Services from "../services/Services";
 import ProductsList from "../components/UI/ProductsList";
+import { scrollToTop } from "../components/Scroll-Link/ScrollToTop";
 
 const Home = () => {
     const [trendingProducts, setTrendingProducts] =  useState([])
@@ -64,7 +65,7 @@ const Home = () => {
                                 <p>Lorem ipsum dolor sit amet consectetur, adipisicing
                                 elit. Quaerat nulla repellat quo eaque alias corporis
                                 sunt, facilis nesciunt rem fugit!</p>
-                                <Link to='/shop'>
+                                <Link to='/shop' onClick={scrollToTop}>
                                     <motion.button whileTap={{ scale: 1.2}} className="buy__btn">
                                         SHOP NOW
                                     </motion.button>
@@ -114,7 +115,7 @@ const Home = () => {
                             </div>
                             <Clock />
 
-                                <Link to="/shop">
+                                <Link onClick={scrollToTop} to="/shop">
                                     <motion.button whileTap={{scale:1.2}} className="buy__btn store__btn">
                                         Visit Store
                                     </motion.button>
