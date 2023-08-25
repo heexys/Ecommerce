@@ -39,11 +39,16 @@ const Header = () => {
 
     const headerRef = useRef(null);
     const totalQuantity = useSelector(state => state.cart.totalQuantity);
+    const totalFavorite = useSelector(state => state.cart.totalQuantity);
     const profileActionRef = useRef(null);
 
     const menuRef = useRef(null);
     const navigate = useNavigate();
     const { currentUser } = useAuth();
+
+    const multimartHandle = () => {
+        navigate('/');
+      }
 
     const stickyHeaderFunc = () => {
         window.addEventListener("scroll",  () => {
@@ -79,6 +84,11 @@ const Header = () => {
         scrollToTop();
     };
 
+    const navigateToFavorite = () => {
+        navigate('/favorite');
+        scrollToTop();
+    };
+
     const toggleProfileActions = () => profileActionRef.current.classList.toggle('show__profileActions');
 
     return (
@@ -86,12 +96,12 @@ const Header = () => {
             <Container>
                 <Row>
                     <div className="nav__wrapper">
-                        <div className="logo">
+                        <motion.div whileTap={{scale:0.93}} onClick={multimartHandle} className="logo">
                             <img src={logo} alt="logo" />
                             <div>
                                 <h1>Multimart</h1>
                             </div>
-                        </div>
+                        </motion.div>
 
                         <div className="navigation" ref={menuRef} onClick={menuToggle}>
                             <ul className="menu">
@@ -111,9 +121,9 @@ const Header = () => {
                         </div>
 
                         <div className="nav__icons">
-                            <span className='fav__icon'>
+                            <span className='fav__icon' onClick={navigateToFavorite}>
                                 <i class="ri-heart-line"></i>
-                                <span className="badge">1</span>
+                                <span className="badge">{ totalFavorite}</span>
                             </span>
 
                             <span className="cart__icon" onClick={navigateToCart}>
@@ -134,9 +144,11 @@ const Header = () => {
                                    ref={profileActionRef}
                                    onClick={toggleProfileActions}
                                   >
-                                    {currentUser ? <span onClick={logout}>Logout</span> : <div className=''>
+                                    {currentUser ?
+                                      <div>
+                                        <span onClick={logout}>Logout</span>
+                                      </div> : <div className='d-flex align-items-center jistify-content-center flex-column'>
                                         <Link to="/signup">Signup</Link>
-                                        <span> / </span>
                                         <Link to="/login">Login</Link>
                                       </div>
                                     }

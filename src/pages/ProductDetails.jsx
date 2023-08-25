@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Helmet from '../components/Helmet/Helmet';
 import CommonSection from '../components/UI/CommonSection';
@@ -8,13 +8,17 @@ import { cartActions } from "../redux/slices/cartSlice";
 
 import { Container, Row, Col } from "reactstrap";
 import '../styles/product-details.css'
-import products from '../assets/data/products';
 
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
+import { db } from "../firebase.config";
+import { doc, getDoc } from "firebase/firestore";
+import useGetData from "../custom-hooks/useGetData";
+
 const ProductDetails = () => {
 
+    const [product, setProduct] = useState({})
     const [tab, setTab] = useState('desc');
     const reviewUser = useRef('');
     const reviewMsg = useRef('');
@@ -22,13 +26,30 @@ const ProductDetails = () => {
 
     const [rating, setRating] = useState(null);
     const {id} = useParams();
-    const product = products.find(item => item.id === id);
 
-    const {imgUrl, productName, price, avgRating, reviews, description, shortDesc, category } = product
+    const {data: products} = useGetData('products')
+
+    const docRef = doc(db, 'products', id)
+
+    useEffect(() => {
+        const getProduct = async() => {
+            const docSnap = await getDoc(docRef)
+
+            if(docSnap.exists()){
+                setProduct(docSnap.data())
+            } else {
+                console.log('no product!')
+            }
+        }
+
+        getProduct()
+    },[])
+
+    const {imgUrl, productName, price, description, shortDesc, category } = product;
 
     const relatedProducts = products.filter( item => item.category === category);
 
-    const submitHandler = (e) => {
+    const submitHandler = e => {
         e.preventDefault()
 
         const reviewUserName = reviewUser.current.value;
@@ -58,7 +79,7 @@ const ProductDetails = () => {
         <Helmet title={productName}>
             <CommonSection title={productName} />
 
-            <section>
+            <section className="pt-0">
                 <Container>
                     <Row>
                         <Col lg='6'>
@@ -68,7 +89,7 @@ const ProductDetails = () => {
                         <Col lg='6'>
                             <div className="product__details">
                                 <h2>{productName}</h2>
-                                <div className="product__rating d-flex align-items-center gap-5 mb-3">
+                                {/* <div className="product__rating d-flex align-items-center gap-5 mb-3">
                                     <div>
                                         <span><i class='ri-star-s-fill'></i></span>
                                         <span><i class='ri-star-s-fill'></i></span>
@@ -80,15 +101,22 @@ const ProductDetails = () => {
                                     <p>
                                         (<span>{avgRating}</span> Ratings)
                                     </p>
-                                </div>
+                                </div> */}
 
                             <div className="d-flex align-items-center gap-5">
                                 <span className="product__price">${price}</span>
-                                <span>Category: {category.toUpperCase()}</span>
+                                <span>Category: {category}</span>
                             </div>
                                 <p className="mt-3">{shortDesc}</p>
-
-                                <motion.button onClick={addToCart} whileTap={{scale:1.2}} className="buy__btn">Add to Cart</motion.button>
+                                <div className="d-flex align-items-end gap-2">
+                                    <motion.button onClick={addToCart} whileTap={{scale:1.2}} className="buy__btn">Add to Cart</motion.button>
+                                
+                                    <div className="nav__icons">
+                                        <span className='fav__icon'>
+                                            <i class="ri-heart-line"></i>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </Col>
                     </Row>
@@ -103,7 +131,10 @@ const ProductDetails = () => {
                                 <h6 onClick={() => setTab('desc')} className={`${tab === "desc" ? "active__tab" : ""}`}>
                                     Description
                                 </h6>
-                                <h6 onClick={() => setTab('rev')} className={`${tab === "rev" ? "active__tab" : ""}`}>Reviews ({reviews.length})</h6>
+                                <h6 onClick={() => setTab('rev')} className={`${tab === "rev" ? "active__tab" : ""}`}>
+                                    Reviews 
+                                    {/* ({reviews.length}) */}
+                                    </h6>
                             </div>
 
                             {tab ==='desc' ? (
@@ -113,15 +144,7 @@ const ProductDetails = () => {
                             ) : (
                                 <div className="product__review mt-5">
                                     <div className="review__wrapper">
-                                        <ul>
-                                            {reviews?.map((item, index) => (
-                                                <li key={index} className="mb-4">
-                                                    <h6>Jhon Doe</h6>
-                                                    <span>{item.rating} ( rating)</span>
-                                                    <p>{item.text}</p>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                        
 
                                         <div className="review__form">
                                             <h4>Leave your experience</h4>

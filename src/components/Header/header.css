@@ -90,16 +90,17 @@
 
 .nav__icons .profile .profile__actions {
     position: absolute;
-    top: 98%;
-    left: 0;
-    width: 150px;
+    text-align: center;
+    top: 80%;
+    right: -45px;
+    width: 115px;
     z-index: 10;
-    padding: 15px;
+    padding: 3px;
     align-items: center;
     flex-direction: column;
     background: var(--card-bg-01);
     line-height: 30px;
-    /* display: none; */
+    border-radius: 7px;
     cursor: pointer;
 }
 
@@ -130,6 +131,11 @@
 }
 
 @media only screen and (max-width: 768px)  {
+
+    .nav__icons .profile .profile__actions {
+        top: 110%;
+    }
+
     .navigation {
         position: fixed;
         top: 0;

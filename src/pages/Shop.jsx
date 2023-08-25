@@ -1,69 +1,59 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/CommonSection";
 
 import { Container, Row, Col } from "reactstrap";
 import '../styles/shop.css'
 
-import products from '../assets/data/products';
 import ProductsList from "../components/UI/ProductsList";
+import useGetData from "../custom-hooks/useGetData";
+
 
 const Shop = () => {
 
-    const [productsData, setProductsData] = useState(products)
+    const {data: products, loading} = useGetData('products')
+    const [productsData, setProductsData] = useState(products);
+
+    useEffect(() => {
+        if (!loading) {
+            setProductsData(products);
+        }
+    }, [loading, products]);
 
     const handleFilter = e => {
+        const filterValue = e.target.value;
 
-        const filterValue = e.target.value
-        if(filterValue === 'sofa') {
-            const filteredProducts = products.filter(
-                (item) => item.category === 'sofa'
-                );
-
-            setProductsData(filteredProducts);
+        if (filterValue === '') {
+            setProductsData(products);
+            return;
         }
 
-        if(filterValue === 'mobile') {
-            const filteredProducts = products.filter(
-                (item) => item.category === 'mobile'
-                );
+        const filteredProducts = products.filter(
+            item => item.category === filterValue
+        );
 
-            setProductsData(filteredProducts)
-        }
-
-        if(filterValue === 'chair') {
-            const filteredProducts = products.filter(
-                (item) => item.category === 'chair'
-                );
-
-            setProductsData(filteredProducts)
-        }
-
-        if(filterValue === 'watch') {
-            const filteredProducts = products.filter(
-                (item) => item.category === 'watch'
-                );
-
-            setProductsData(filteredProducts)
-        }
-
-        if(filterValue === 'wireless') {
-            const filteredProducts = products.filter(
-                (item) => item.category === 'wireless'
-                );
-
-            setProductsData(filteredProducts)
-        }
+        setProductsData(filteredProducts);
     };
 
     const handleSearch = e => {
-        const searchTerm = e.target.value
+        const searchTerm = e.target.value.toLowerCase();
 
-        const searchedProducts = products.filter(item => item.productName.
-        toLowerCase().includes(searchTerm.toLowerCase()))
+        const filterValue = document.querySelector(".filter__widget select").value;
 
-        setProductsData(searchedProducts)
-    }
+        if (filterValue) {
+            const searchedProducts = products.filter(
+                item => item.productName.toLowerCase().includes(searchTerm) && item.category === filterValue
+            );
+
+            setProductsData(searchedProducts);
+        } else {
+            const searchedProducts = products.filter(
+                item => item.productName.toLowerCase().includes(searchTerm)
+            );
+
+            setProductsData(searchedProducts);
+        }
+    };  
 
     return (
             <Helmet title={'Shop'}>
@@ -75,7 +65,7 @@ const Shop = () => {
                             <Col lg="3" md='6'>
                                 <div className="filter__widget">
                                     <select onChange={handleFilter}>
-                                        <option>Filter By Category</option>
+                                        <option value="">Filter By Category</option>
                                             <option value="sofa">Sofa</option>
                                             <option value="mobile">Mobile</option>
                                             <option value="chair">Chair</option>
@@ -105,13 +95,17 @@ const Shop = () => {
 
                 <section className="pt-0">
                     <Container>
+                       {loading ? (
+                        <h1 className="text-center fs-4">Loading...</h1>
+                    ) : (
                         <Row>
-                            {productsData.length ===  0 ? (
+                            {productsData.length === 0 ? (
                                 <h1 className="text-center fs-4">No products are found!</h1>
                             ) : (
                                 <ProductsList data={productsData} />
                             )}
                         </Row>
+                    )}
                     </Container>
                 </section>
             </Helmet>            

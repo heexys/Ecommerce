@@ -59,7 +59,8 @@ const Signup = () => {
                             uid: user.uid,
                             displayName: username,
                             email,
-                            photoURL: downloadURL
+                            photoURL: downloadURL,
+                            admin: false // Set admin status to false
                         });
                     });
                 })

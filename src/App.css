@@ -21,7 +21,17 @@
   box-sizing: border-box;
 }
 
+a:hover {
+  color: unset;
+}
+
+.ddd {
+  min-height: 45vh;
+}
+
 body {
+  margin: auto;
+  max-width: 1920px;
   font-family: "Montserrat", sans-serif;
 }
 
@@ -72,4 +82,16 @@ section {
   .section{
     padding: 40px 0px;
   }  
+}
+
+.red-box {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}
+
+.blue-box {
+  width: 100px;
+  height: 100px;
+  background-color: blue;
 }
