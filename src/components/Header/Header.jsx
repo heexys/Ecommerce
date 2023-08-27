@@ -123,7 +123,7 @@ const Header = () => {
                         <div className="nav__icons">
                             <span className='fav__icon' onClick={navigateToFavorite}>
                                 <i class="ri-heart-line"></i>
-                                <span className="badge">{ totalFavorite}</span>
+                                <span className="badge">1</span>
                             </span>
 
                             <span className="cart__icon" onClick={navigateToCart}>

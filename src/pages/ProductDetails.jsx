@@ -32,18 +32,18 @@ const ProductDetails = () => {
     const docRef = doc(db, 'products', id)
 
     useEffect(() => {
-        const getProduct = async() => {
-            const docSnap = await getDoc(docRef)
-
-            if(docSnap.exists()){
-                setProduct(docSnap.data())
+        const getProduct = async () => {
+            const docSnap = await getDoc(docRef);
+    
+            if (docSnap.exists()) {
+                setProduct(docSnap.data());
             } else {
-                console.log('no product!')
+                console.log('no product!');
             }
-        }
-
-        getProduct()
-    },[])
+        };
+    
+        getProduct();
+    }, [id]); 
 
     const {imgUrl, productName, price, description, shortDesc, category } = product;
 
@@ -78,7 +78,6 @@ const ProductDetails = () => {
     return (
         <Helmet title={productName}>
             <CommonSection title={productName} />
-
             <section className="pt-0">
                 <Container>
                     <Row>
